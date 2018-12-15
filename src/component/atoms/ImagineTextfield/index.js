@@ -15,8 +15,6 @@ export default class ImagineTextfield extends React.Component {
             <TextInput
                 {...this.props}
                 style={[styles.textfield, this.props.style]}
-                onChangeText={(text) => this.setState({ text })}
-                value={this.state.text}
             />
         );
     }

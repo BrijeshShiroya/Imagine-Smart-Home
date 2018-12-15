@@ -9,8 +9,8 @@ export default class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            mobile: '',
-            password: '',
+            mobile: '9558050804',
+            password: '123456',
             isLoading: false
         }
     }
@@ -41,7 +41,7 @@ export default class Login extends Component {
                     value={this.state.mobile}
                     keyboardType='number-pad'
                     maxLength={10}
-                    onChangeText={(value) => { this.setState({ email: value }) }}
+                    onChangeText={(value) => { this.setState({ mobile: value }) }}
                 />
                 <ImagineTextfield
                     placeholder={title.PLACEHOLDER_PASSWORD}
