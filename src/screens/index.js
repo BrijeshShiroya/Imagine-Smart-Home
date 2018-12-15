@@ -10,9 +10,11 @@ import Login from './Login';
 import Home from './Home';
 import Splash from './Splash';
 import Register from './Register';
+import DeviceList from './DeviceList';
 export {
     Splash,
     Login,
     Home,
-    Register
+    Register,
+    DeviceList
 };
