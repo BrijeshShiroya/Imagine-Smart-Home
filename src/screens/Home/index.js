@@ -1,153 +1,105 @@
 import React, { Component, } from 'react';
-import { View, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import styles from './style';
+import { ImagineSwitch } from 'atoms';
+import * as icon from 'icons';
+import Slider from "react-native-slider";
+
 // import firebase from 'react-native-firebase'
 
 export default class Home extends Component {
 
     constructor(props) {
         super(props)
-        setTimeout(() => {
-            // this.checkPermission()
-        }, 200);
+        this.state = {
+            switch1On: true,
+            switch2On: true,
+            switch3On: true,
+            switch4On: true,
+            sliderValue: 0,
+        }
+    }
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            this.props.navigation.goBack()
+            return true
+        });
     }
 
     componentWillUnmount() {
-        this.unsubscribeFromNotificationListener()
+        BackHandler.removeEventListener('hardwareBackPress', () => { });
     }
 
-    //TODO Firebase notification 
-
-    async checkPermission() {
-        const enabled = await firebase.messaging().hasPermission();
-        if (enabled) {
-            this.getToken();
-        } else {
-            this.requestPermission();
-        }
-        const channel = new firebase.notifications.Android.Channel(
-            'channelId',
-            'Channel Name',
-            firebase.notifications.Android.Importance.Max
-        ).setDescription('A natural description of the channel');
-        firebase.notifications().android.createChannel(channel);
-
-        firebase.notifications().getInitialNotification()
-            .then((notificationOpen) => {
-                if (notificationOpen) {
-                    // App was opened by a notification
-                    // Get the action triggered by the notification being opened
-                    const action = notificationOpen.action;
-                    // Get information about the notification that was opened
-                    const notification = notificationOpen.notification;
-                }
-            });
-
-
-        // the listener returns a function you can use to unsubscribe
-        this.unsubscribeFromNotificationListener = firebase.notifications().onNotification((notification) => {
-            if (Platform.OS === 'android') {
-                // alert('unsubscribeFromNotificationListener - android1s')
-                const localNotification = new firebase.notifications.Notification({
-                    sound: 'default',
-                    show_in_foreground: true,
-                })
-                    .setNotificationId(notification.notificationId)
-                    .setTitle(notification.title)
-                    .setSubtitle(notification.subtitle)
-                    .setBody(notification.body)
-                    .setData(notification.data)
-                    .android.setChannelId('channelId') // e.g. the id you chose above
-                    .android.setColor('#000000') // you can set a color here
-                    .android.setGroup(notification.notificationId)
-                    .android.setPriority(firebase.notifications.Android.Priority.High);
-
-
-                firebase.notifications()
-                    .displayNotification(localNotification)
-                    .catch(err => console.error(err));
-
-            } else if (Platform.OS === 'ios') {
-                const localNotification = new firebase.notifications.Notification()
-                    .setNotificationId(notification.notificationId)
-                    .setTitle(notification.title)
-                    .setSound('default')
-                    .setSubtitle(notification.subtitle)
-                    .setBody(notification.body)
-                    .setData(notification.data)
-                    .ios.setBadge(notification.ios.badge);
-
-                firebase.notifications()
-                    .displayNotification(localNotification)
-                    .catch(err => console.error(err));
-
-                // alert('Local notification')
-            }
-        });
-
-        const notificationOpen = await firebase.notifications().getInitialNotification();
-        if (notificationOpen) {
-            // alert('Remote notification from killed state to foreground state')
-            // App was opened by a notification
-            // Get the action triggered by the notification being opened from killed state to foreground
-            const action = notificationOpen.action;
-            // Get information about the notification that was opened
-            const notification = notificationOpen.notification;
-            if (notification.data) { // && Platform.OS !== 'ios'
-                setTimeout(() => {
-                    // alert('getInitialNotification: ' + JSON.stringify(notification.data));
-                    this.handleNavigation(notification.data);
-                }, 100);
-            }
-            // alert(JSON.stringify(notification.data))
-        }
-
-        this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
-            // Get the action triggered by the notification being opened from background state to foreground
-            // alert('Remote notification from background state to foreground state')
-            const action = notificationOpen.action;
-            // Get information about the notification that was opened
-            const notification = notificationOpen.notification;
-            if (notification.data) { // && Platform.OS !== 'ios'
-                setTimeout(() => {
-                    // alert('getInitialNotification: ' + JSON.stringify(notification.data));
-                    this.handleNavigation(notification.data);
-                }, 100);
-            }
-        });
+    renderBackButton() {
+        return (
+            <TouchableOpacity style={{ position: 'absolute', top: 40, left: 20 }} onPress={() => {
+                this.props.navigation.goBack()
+            }}>
+                <Text style={{ fontSize: 15 }}>{`Back`}</Text>
+            </TouchableOpacity>
+        )
     }
-
-    //3
-    async getToken() {
-        // let fcmToken = await AsyncStorage.getItem('fcmToken', value);
-        // if (!fcmToken) {
-        let fcmToken = await firebase.messaging().getToken();
-        // alert(fcmToken)
-        if (fcmToken) {
-            // user has a device token
-            console.log(fcmToken)
-        }
-        // }
-    }
-
-    //2
-    async requestPermission() {
-        try {
-            await firebase.messaging().requestPermission();
-            // User has authorised
-            this.getToken();
-        } catch (error) {
-            // User has rejected permissions
-            console.log('permission rejected');
-        }
+    getVal(val) {
+        console.log('hi')
     }
     render() {
         return (
-            <View style={styles.container} />
+            <View style={styles.container}>
+                {this.renderBackButton()}
+                {/* <ImagineSwitch
+                    style={{ height: 200, width: 150 }}
+                    source={this.state.switch1On ? icon.IC_BLACK_S_OFF : icon.IC_BLACK_S_ON} onPress={() => {
+                        this.setState({
+                            switch1On: !this.state.switch1On
+                        })
+                    }} />
+                <ImagineSwitch
+                    style={{ height: 200, width: 150 }}
+                    source={this.state.switch2On ? icon.IC_HOME_S_OFF : icon.IC_HOME_S_ON} onPress={() => {
+                        this.setState({
+                            switch2On: !this.state.switch2On
+                        })
+                    }} /> */}
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', }}>
+                    <ImagineSwitch
+                        style={{ height: 150, width: 150, marginRight: 20, marginBottom: 20 }}
+                        source={this.state.switch1On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON} onPress={() => {
+                            this.setState({
+                                switch1On: !this.state.switch1On
+                            })
+                        }} />
+                    <ImagineSwitch
+                        style={{ height: 150, width: 150, }}
+                        source={this.state.switch2On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON} onPress={() => {
+                            this.setState({
+                                switch2On: !this.state.switch2On
+                            })
+                        }} />
+                    <ImagineSwitch
+                        style={{ height: 150, width: 150, marginRight: 20, }}
+                        source={this.state.switch3On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON} onPress={() => {
+                            this.setState({
+                                switch3On: !this.state.switch3On
+                            })
+                        }} />
+                    <ImagineSwitch
+                        style={{ height: 150, width: 150, }}
+                        source={this.state.switch4On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON} onPress={() => {
+                            this.setState({
+                                switch4On: !this.state.switch4On
+                            })
+                        }} />
+                </View>
+                <Slider
+                    style={{ width: 300, height: 100 }}
+                    step={1}
+                    minimumValue={0}
+                    maximumValue={4}
+                    value={this.state.sliderValue}
+                    onValueChange={val => this.setState({ sliderValue: val })}
+                    onSlidingComplete={val => this.getVal(val)}
+                />
+            </View>
         );
-    }
-
-    handleNavigation(notif) {
-        alert(JSON.stringify(notif))
     }
 }

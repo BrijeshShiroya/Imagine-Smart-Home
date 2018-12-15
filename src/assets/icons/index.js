@@ -1,1 +1,10 @@
 export const IC_LOGO = require('./logo.png');
+export const IC_BLACK_S_OFF = require('./black_switch_off.png');
+export const IC_BLACK_S_ON = require('./black_switch_on.png');
+export const IC_HOME_S_OFF = require('./home_switch_off.png');
+export const IC_HOME_S_ON = require('./home_switch_on.png');
+export const IC_WHITE_LIGHT = require('./white_light.png');
+export const IC_YELLOW_LIGHT = require('./yellow_light.png');
+export const IC_GREEN_LIGHT = require('./green_light.png');
+export const IC_CIRCLE_S_ON = require('./circle_s_on.png');
+export const IC_CIRCLE_S_OFF = require('./circle_s_off.png');
