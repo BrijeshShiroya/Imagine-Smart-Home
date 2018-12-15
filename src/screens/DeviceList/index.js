@@ -9,7 +9,8 @@ import {
     View,
     FlatList,
     PermissionsAndroid,
-    Linking
+    Linking,
+    BackHandler
 } from 'react-native';
 import { ImagineTextfield, ImagineButton } from 'atoms';
 
@@ -38,6 +39,23 @@ export default class DeviceList extends Component {
     componentDidMount() {
         console.log(wifi);
         this.askForUserPermissions();
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            this.props.navigation.goBack()
+            return true
+        });
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', () => { });
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps) {
+
+        }
     }
 
     async askForUserPermissions() {
@@ -115,7 +133,7 @@ export default class DeviceList extends Component {
                     this.setState({
                         currentBSSID: filteredDevices[0].BSSID,
                         currentSSID: filteredDevices[0].SSID,
-                        currentDeviceSerial: filteredDevices[0].SSID.slice(-6),// finding last 6 character
+                        currentDeviceSerial: filteredDevices[0].SSID.slice(-8),// finding last 6 character
                         numberOfSwitch: filteredDevices[0].SSID.charAt(9),//finding number of switch
                         numberOfFan: filteredDevices[0].SSID.charAt(12)//finding number of fans
                     })

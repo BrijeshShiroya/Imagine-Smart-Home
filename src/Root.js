@@ -34,6 +34,10 @@ const store = createStore(
 );
 
 export default class Root extends React.Component {
+
+    componentDidMount() {
+        console.disableYellowBox = true;
+    }
     render() {
         return (
             <Provider store={store}>

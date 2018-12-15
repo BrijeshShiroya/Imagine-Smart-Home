@@ -4,7 +4,7 @@ const initialState = {
     type: 'Reset',
     index: 0,
     routes: [
-        { key: 'SplashScreen', routeName: 'DeviceList' },
+        { key: 'SplashScreen', routeName: 'Splash' },
     ],
 };
 
