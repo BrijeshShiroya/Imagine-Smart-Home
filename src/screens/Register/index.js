@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, BackHandler, TouchableOpacity, Text } from 'react-native';
-import { ImagineTextfield, ImagineButton } from 'atoms';
+import { ImagineTextfield, ImagineButton, ImagineLoader } from 'atoms';
 import * as title from '../../constants/titles';
+import * as api from '../../constants/api';
 
 import styles from './style';
 export default class Register extends Component {
@@ -42,7 +43,7 @@ export default class Register extends Component {
                     value={this.state.mobile}
                     keyboardType='number-pad'
                     maxLength={10}
-                    onChangeText={(value) => { this.setState({ email: value }) }}
+                    onChangeText={(value) => { this.setState({ mobile: value }) }}
                 />
                 <ImagineTextfield
                     style={{ marginBottom: 15 }}
@@ -64,7 +65,11 @@ export default class Register extends Component {
         return (
             <View style={{ marginTop: 20 }}>
                 <ImagineButton title={'Register'} onPress={() => {
-                    this.props.navigation.navigate('Login')
+                    this.setState({
+                        isLoading: true
+                    })
+                    this.registerPerform()
+                    // this.props.navigation.navigate('Login')
                 }} />
             </View>
         )
@@ -78,12 +83,38 @@ export default class Register extends Component {
             </TouchableOpacity>
         )
     }
+    registerPerform() {
+        if (this.state.mobile != '' && this.state.password != '' && this.state.cpassword != '') {
+            const axios = require('axios');
+            axios({
+                method: 'get',
+                url: `${api.API_REGISTER}REG_PASS=${this.state.password}&REG_USER=${this.state.mobile}`,
+                headers: {
+                    'Content-Type': 'Application/json',
+                }
+            }).then((response) => {
+                this.setState({
+                    isLoading: false
+                })
+                if (response.status == 200) {
+                    // console.log(JSON.parse(response.data))
+                    if (response.data.Error == 'Success') {
+                        alert('Register Success')
+                        this.props.navigation.navigate('Login')
+                    } else {
+                        alert(response.data.Error)
+                    }
+                }
+            })
+        }
+    }
     render() {
         return (
             <View style={styles.container}>
                 {this.renderBackButton()}
                 {this.renderTextFieldView()}
                 {this.renderRegisterButton()}
+                <ImagineLoader isVisible={this.state.isLoading} />
             </View>
         );
     }

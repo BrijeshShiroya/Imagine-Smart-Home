@@ -94,7 +94,7 @@ export default class Login extends Component {
                     if (response.data.Error == 'Success') {
                         this.props.navigation.navigate('Home')
                     } else {
-                        alert('Enter Valid mobile number or password')
+                        alert(response.data.Error)
                     }
                 }
             })
