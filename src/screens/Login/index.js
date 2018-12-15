@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text, BackHandler, TouchableOpacity } from 'react-native';
-import { ImagineTextfield, ImagineButton } from 'atoms';
+import { ImagineTextfield, ImagineButton, ImagineLoader } from 'atoms';
 import * as title from '../../constants/titles';
 import * as common from '../../constants/common';
 import styles from './style';
+import * as api from '../../constants/api';
 export default class Login extends Component {
 
     constructor(props) {
@@ -56,7 +57,11 @@ export default class Login extends Component {
         return (
             <View style={{ marginTop: 20 }}>
                 <ImagineButton title={'Login'} onPress={() => {
-                    this.props.navigation.navigate('Home')
+                    this.setState({
+                        isLoading: true
+                    })
+                    this.loginPerform()
+                    // this.props.navigation.navigate('Home')
                 }} />
             </View>
         )
@@ -71,6 +76,31 @@ export default class Login extends Component {
         )
     }
 
+    loginPerform() {
+        if (this.state.mobile != '' && this.state.password != '') {
+            const axios = require('axios');
+            axios({
+                method: 'get',
+                url: `${api.API_LOGIN}REG_PASS=${this.state.password}&REG_USER=${this.state.mobile}`,
+                headers: {
+                    'Content-Type': 'Application/json',
+                }
+            }).then((response) => {
+                this.setState({
+                    isLoading: false
+                })
+                if (response.status == 200) {
+                    // console.log(JSON.parse(response.data))
+                    if (response.data.Error == 'Success') {
+                        this.props.navigation.navigate('Home')
+                    } else {
+                        alert('Enter Valid mobile number or password')
+                    }
+                }
+            })
+        }
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -78,6 +108,7 @@ export default class Login extends Component {
                 {this.renderTextFieldView()}
                 {this.renderLoginButton()}
                 {this.renderRegiterButton()}
+                <ImagineLoader isVisible={this.state.isLoading} />
             </View>
         );
     }
