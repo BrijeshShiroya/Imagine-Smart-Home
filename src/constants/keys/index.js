@@ -1,0 +1,5 @@
+export const KEY_1 = 'key1'
+export const KEY_2 = 'key2'
+export const KEY_3 = 'key3'
+export const KEY_4 = 'key4'
+export const KEY_5 = 'key5'
