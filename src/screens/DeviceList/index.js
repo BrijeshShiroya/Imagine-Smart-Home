@@ -10,16 +10,21 @@ import {
     FlatList,
     PermissionsAndroid,
     Linking,
-    BackHandler
+    BackHandler,
+    WebView,
+    AsyncStorage,
+    DeviceEventEmitter
 } from 'react-native';
 import { ImagineTextfield, ImagineButton } from 'atoms';
-
+import * as api from '../../constants/api';
+import * as keys from '../../constants/keys';
 import wifi from 'react-native-android-wifi';
 
 export default class DeviceList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            deviceConfUrl: '',
             txtSSID: '',
             txtPassword: '',
             numberOfSwitch: '0',
@@ -37,7 +42,6 @@ export default class DeviceList extends Component {
     }
 
     componentDidMount() {
-        console.log(wifi);
         this.askForUserPermissions();
     }
 
@@ -139,7 +143,7 @@ export default class DeviceList extends Component {
                     })
                     this.findAndConnect()
                 } else {
-                    alert('No Imagine device found')
+                    // alert('No Imagine device found')
                 }
             }, 300);
         },
@@ -151,7 +155,10 @@ export default class DeviceList extends Component {
 
     //connectiong device to router
     connectDeviceToRouter() {
-        Linking.openURL(`http://192.168.4.1/wifisave?s=${this.state.currentScannedWifi}&p=${this.state.txtPassword}`).catch(err => console.error('An error occurred', err));
+        this.setState({
+            deviceConfUrl: `http://192.168.4.1/wifisave?s=${this.state.currentScannedWifi}&p=${this.state.txtPassword}`
+        })
+        // Linking.openURL(`http://192.168.4.1/wifisave?s=${this.state.currentScannedWifi}&p=${this.state.txtPassword}`).catch(err => console.error('An error occurred', err));
         // alert(`http://192.168.4.1/wifisave?s=${this.state.currentScannedWifi}&p=${this.state.txtPassword}`)
         //http://192.168.4.1/wifisave?s=wifiname &p=wifipass
         // if (this.state.txtSSID != '' && this.state.txtPassword != '') {
@@ -236,10 +243,83 @@ export default class DeviceList extends Component {
             </TouchableOpacity>
         )
     }
+    //http://imaginesmarthome.com/android_api.php?Apikey=ADMIN@123456789&Action=REGISTER_DEVICE&
+    //Device_serial = 00D4E4F0& REG_USER=7600016941 & FAN_CH=1 & SW_CH=1
+    registerDevices() {
+        try {
+            AsyncStorage.getItem(keys.kUSER_DATA).then((user) => {
+                let userData = JSON.parse(user)
+                const axios = require('axios');
+                axios({
+                    method: 'get',
+                    url: `${api.API_DEVICE_REGISTER}Device_serial=${this.state.currentDeviceSerial}&REG_USER=${userData.mobile}&FAN_CH=${this.state.numberOfFan}&SW_CH=${this.state.numberOfSwitch}`,
+                    headers: {
+                        'Content-Type': 'Application/json',
+                    }
+                }).then((response) => {
+                    if (response.status == 200) {
+                        console.log(response.data)
+                        console.log(response.data["devices"])
+
+                        let result = [{
+                            "device_type": "FAN",
+                            "device_serials": "0011C42B-FN1",
+                            "device_Name": "IMAGINE FAN-1"
+                        }, {
+                            "device_type": "FAN",
+                            "device_serials": "0011C42B-FN2",
+                            "device_Name": "IMAGINE FAN-2"
+                        }, {
+                            "device_type": "SWITCH",
+                            "device_serials": "0011C42B-SW1",
+                            "device_Name": "IMAGINE SWITCH-1"
+                        }, {
+                            "device_type": "SWITCH",
+                            "device_serials": "0011C42B-SW2",
+                            "device_Name": "IMAGINE SWITCH-2"
+                        }, {
+                            "device_type": "SWITCH",
+                            "device_serials": "0011C42B-SW3",
+                            "device_Name": "IMAGINE SWITCH-3"
+                        }, {
+                            "device_type": "SWITCH",
+                            "device_serials": "0011C42B-SW4",
+                            "device_Name": "IMAGINE SWITCH-4"
+                        }]
+                        // alert(JSON.stringify(result))
+
+                        if (result.length > 0) {
+
+                            this.props.navigation.navigate("Home", { deviceList: result })
+                            DeviceEventEmitter.emit('refreshDevices', result);
+                        }
+                        // console.log(JSON.stringify(response.data))
+                        // console.log(JSON.parse(response.data))
+                        // if (response.data.Error == 'Success') {
+                        //     let userDic = {
+                        //         'mobile': this.state.mobile,
+                        //         'password': this.state.password
+                        //     }
+                        //     AsyncStorage.setItem(keys.kUSER_DATA, JSON.stringify(userDic))
+                        //     setTimeout(() => {
+                        //         this.props.navigation.navigate('Home')
+                        //     }, 300);
+                        // } else {
+                        //     alert(response.data.Error)
+                        // }
+                    }
+                })
+            })
+        } catch (error) {
+            alert(error)
+        }
+
+    }
 
     render() {
         return (
             <View>
+
                 {/* <View style={styles.container}>
                     <Text style={styles.title}>React Native Android Wifi Example App</Text>
                     <View style={styles.instructionsContainer}>
@@ -260,6 +340,12 @@ export default class DeviceList extends Component {
                 }}>
                     <Text style={styles.buttonText}>Scan Wifi</Text>
                 </TouchableHighlight>
+                <TouchableHighlight style={[styles.bigButton, { left: 20, top: 100 }]} onPress={() => {
+
+                    this.registerDevices()
+                }}>
+                    <Text style={styles.buttonText}>Register</Text>
+                </TouchableHighlight>
 
                 {this.renderTextFieldView()}
                 {this.renderLoginButton()}
@@ -267,6 +353,13 @@ export default class DeviceList extends Component {
                     data={this.state.wifiList}
                     renderItem={({ item }) => this._renderItem(item)}
                     contentContainerStyle={{ marginLeft: 20 }} />
+                <WebView
+                    source={{ uri: this.state.deviceConfUrl }}
+                    style={{ position: 'absolute', bottom: 1000, width: 300, height: 100, backgroundColor: 'red' }}
+                    onLoadEnd={e => {
+                        // this.registerDevices()
+                    }}
+                />
             </View >
         );
     }

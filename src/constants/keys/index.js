@@ -1,4 +1,4 @@
-export const KEY_1 = 'key1'
+export const kUSER_DATA = 'userData'
 export const KEY_2 = 'key2'
 export const KEY_3 = 'key3'
 export const KEY_4 = 'key4'

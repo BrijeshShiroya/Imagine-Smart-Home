@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import { View, Text, BackHandler, TouchableOpacity } from 'react-native';
+import { View, Text, BackHandler, TouchableOpacity, AsyncStorage } from 'react-native';
 import { ImagineTextfield, ImagineButton, ImagineLoader } from 'atoms';
 import * as title from '../../constants/titles';
 import * as common from '../../constants/common';
 import styles from './style';
 import * as api from '../../constants/api';
+import * as keys from '../../constants/keys';
 export default class Login extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            mobile: '9558050804',
-            password: '111111',
+            mobile: '9978536597',
+            password: '123456',
             isLoading: false
         }
     }
@@ -92,7 +93,14 @@ export default class Login extends Component {
                 if (response.status == 200) {
                     // console.log(JSON.parse(response.data))
                     if (response.data.Error == 'Success') {
-                        this.props.navigation.navigate('Home')
+                        let userDic = {
+                            'mobile': this.state.mobile,
+                            'password': this.state.password
+                        }
+                        AsyncStorage.setItem(keys.kUSER_DATA, JSON.stringify(userDic))
+                        setTimeout(() => {
+                            this.props.navigation.navigate('Home')
+                        }, 300);
                     } else {
                         alert(response.data.Error)
                     }

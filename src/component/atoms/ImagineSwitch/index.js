@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { Text, TouchableOpacity, Image } from 'react-native';
 import styles from './style';
 export default class ImagineSwitch extends Component {
     render() {
@@ -11,6 +11,7 @@ export default class ImagineSwitch extends Component {
                     resizeMode={'contain'}
                     source={this.props.source}
                 />
+                <Text>{this.props.title}</Text>
             </TouchableOpacity>
         );
     }
