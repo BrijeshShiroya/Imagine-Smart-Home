@@ -126,6 +126,30 @@ export default class ControlDeviceDetail extends Component {
         })
     }
 
+    //http://imaginesmarthome.com/android_api.php?Apikey=ADMIN@123456789&Action=
+    //DELETE_DEVICE&REG_USER=7600016941&Device_serial=00D4E4F0-FN1
+    deleteDevice() {
+        try {
+            AsyncStorage.getItem(keys.kUSER_DATA).then((user) => {
+                let userData = JSON.parse(user)
+                const axios = require('axios');
+                axios({
+                    method: 'get',
+                    url: `${api.API_DELETE_DEVICE}REG_USER=${userData.mobile}&Device_serial=${this.state.currentDevice.device_serials}`,
+                    headers: {
+                        'Content-Type': 'Application/json',
+                    }
+                }).then((response) => {
+                    if (response.status == 200) {
+                        alert(JSON.stringify(response.data))
+                    }
+                })
+            })
+        } catch (error) {
+            alert(error)
+        }
+
+    }
 
     //http://imaginesmarthome.com/android_api.php?Apikey=ADMIN@123456789&
     //Action=UPDATE_DEVICE&REG_USER=7600016941&Device_name=night%20lamp&Device_serial=00D4E4F0-FN1
@@ -199,7 +223,7 @@ export default class ControlDeviceDetail extends Component {
                         style={{ height: 30, width: 30, alignSelf: 'center', position: 'absolute', right: 80 }}
                         source={icon.IC_DELETE}
                         onPress={() => {
-
+                            this.deleteDevice()
                         }} />
                 </View>
                 <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
