@@ -8,3 +8,5 @@ export const IC_YELLOW_LIGHT = require('./yellow_light.png');
 export const IC_GREEN_LIGHT = require('./green_light.png');
 export const IC_CIRCLE_S_ON = require('./circle_s_on.png');
 export const IC_CIRCLE_S_OFF = require('./circle_s_off.png');
+export const IC_DELETE = require('./delete.png');
+export const IC_EDIT = require('./edit.png');
