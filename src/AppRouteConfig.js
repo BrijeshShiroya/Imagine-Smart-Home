@@ -4,6 +4,8 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
 import DeviceList from './screens/DeviceList';
+import ControlDevice from './screens/ControlDevice';
+import ControlDeviceDetail from './screens/ControlDeviceDetail';
 
 const AppRouteConfig = createStackNavigator({
     Splash: { screen: Splash, navigationOptions: { gesturesEnabled: false } },
@@ -11,6 +13,8 @@ const AppRouteConfig = createStackNavigator({
     Login: { screen: Login, navigationOptions: { gesturesEnabled: false } },
     Register: { screen: Register, navigationOptions: { gesturesEnabled: false } },
     DeviceList: { screen: DeviceList, navigationOptions: { gesturesEnabled: false } },
+    ControlDevice: { screen: ControlDevice, navigationOptions: { gesturesEnabled: false } },
+    ControlDeviceDetail: { screen: ControlDeviceDetail, navigationOptions: { gesturesEnabled: false } },
 },
     {
         headerMode: 'none'

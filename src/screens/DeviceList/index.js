@@ -258,55 +258,26 @@ export default class DeviceList extends Component {
                     }
                 }).then((response) => {
                     if (response.status == 200) {
-                        console.log(response.data)
-                        console.log(response.data["devices"])
-
-                        let result = [{
-                            "device_type": "FAN",
-                            "device_serials": "0011C42B-FN1",
-                            "device_Name": "IMAGINE FAN-1"
-                        }, {
-                            "device_type": "FAN",
-                            "device_serials": "0011C42B-FN2",
-                            "device_Name": "IMAGINE FAN-2"
-                        }, {
-                            "device_type": "SWITCH",
-                            "device_serials": "0011C42B-SW1",
-                            "device_Name": "IMAGINE SWITCH-1"
-                        }, {
-                            "device_type": "SWITCH",
-                            "device_serials": "0011C42B-SW2",
-                            "device_Name": "IMAGINE SWITCH-2"
-                        }, {
-                            "device_type": "SWITCH",
-                            "device_serials": "0011C42B-SW3",
-                            "device_Name": "IMAGINE SWITCH-3"
-                        }, {
-                            "device_type": "SWITCH",
-                            "device_serials": "0011C42B-SW4",
-                            "device_Name": "IMAGINE SWITCH-4"
-                        }]
-                        // alert(JSON.stringify(result))
-
-                        if (result.length > 0) {
-
-                            this.props.navigation.navigate("Home", { deviceList: result })
-                            DeviceEventEmitter.emit('refreshDevices', result);
+                        // alert(response.data["devices"])
+                        // console.log(response.data["devices"])
+                        if (response.data.devices.length > 0) {
+                            this.props.navigation.navigate("Home", { deviceList: response.data.devices })
+                            DeviceEventEmitter.emit('refreshDevices', response.data.devices);
                         }
-                        // console.log(JSON.stringify(response.data))
-                        // console.log(JSON.parse(response.data))
-                        // if (response.data.Error == 'Success') {
-                        //     let userDic = {
-                        //         'mobile': this.state.mobile,
-                        //         'password': this.state.password
-                        //     }
-                        //     AsyncStorage.setItem(keys.kUSER_DATA, JSON.stringify(userDic))
-                        //     setTimeout(() => {
-                        //         this.props.navigation.navigate('Home')
-                        //     }, 300);
-                        // } else {
-                        //     alert(response.data.Error)
-                        // }
+                        console.log(JSON.stringify(response.data))
+                        console.log(JSON.parse(response.data))
+                        if (response.data.Error == 'Success') {
+                            let userDic = {
+                                'mobile': this.state.mobile,
+                                'password': this.state.password
+                            }
+                            AsyncStorage.setItem(keys.kUSER_DATA, JSON.stringify(userDic))
+                            setTimeout(() => {
+                                this.props.navigation.navigate('Home')
+                            }, 300);
+                        } else {
+                            alert(response.data.Error)
+                        }
                     }
                 })
             })

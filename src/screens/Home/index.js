@@ -66,7 +66,7 @@ export default class Home extends Component {
         if (this.state.currentSSID != '') {
             let deviceId = this.state.currentDeviceSerial
             const axios = require('axios');
-            // alert(`${api.API_CONTROL_DEVICE}Device_serial=${deviceId}-FN1&Device_action=${actionName} `)
+            alert(`${api.API_CONTROL_DEVICE}Device_serial=${deviceId}-FN1&Device_action=${actionName} `)
             axios({
                 method: 'get',
                 url: `${api.API_CONTROL_DEVICE}Device_serial=${deviceId}-FN1&Device_action=${actionName}`,
@@ -149,7 +149,7 @@ export default class Home extends Component {
                         backgroundColor: common.APP_PRIMARY,
                         marginRight: 15,
                     }} onPress={() => {
-
+                        this.props.navigation.navigate('ControlDevice')
                     }}>
                         <Text style={{ fontSize: 15 }}>{`Control Device`}</Text>
                     </TouchableOpacity>
@@ -177,6 +177,7 @@ export default class Home extends Component {
                             onPress={() => {
                                 switch (index) {
                                     case 0:
+                                        alert('index')
                                         this.setState({
                                             fan1On: !this.state.fan1On
                                         })
