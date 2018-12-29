@@ -15,10 +15,11 @@ import {
     AsyncStorage,
     DeviceEventEmitter
 } from 'react-native';
-import { ImagineTextfield, ImagineButton } from 'atoms';
+import { ImagineTextfield, ImagineButton, ImagineNavigationBar } from 'atoms';
 import * as api from '../../constants/api';
 import * as keys from '../../constants/keys';
 import wifi from 'react-native-android-wifi';
+import styles from './style';
 
 export default class DeviceList extends Component {
     constructor(props) {
@@ -203,7 +204,7 @@ export default class DeviceList extends Component {
     }
     renderTextFieldView() {
         return (
-            <View style={{ width: '100%', marginTop: 100 }}>
+            <View style={{ width: '100%', marginTop: 20 }}>
                 <ImagineTextfield
                     style={{ marginBottom: 15 }}
                     placeholder={'SSID'}
@@ -290,34 +291,29 @@ export default class DeviceList extends Component {
     render() {
         return (
             <View>
-
-                {/* <View style={styles.container}>
-                    <Text style={styles.title}>React Native Android Wifi Example App</Text>
-                    <View style={styles.instructionsContainer}>
-                        <Text style={styles.instructionsTitle}>Get all wifi networks in range</Text>
-                        <TouchableHighlight style={styles.bigButton} onPress={this.getWifiNetworksOnPress.bind(this)}>
-                            <Text style={styles.buttonText}>Available WIFI Networks</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View> */}
-                <View style={{ flex: 1 }}>
+                <ImagineNavigationBar
+                    title={'Device List'}
+                    isMenu={true}
+                    onLeftPress={() => {
+                        this.props.navigation.openDrawer()
+                    }}
+                />
+                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-around' }}>
                     <TouchableHighlight style={styles.bigButton} onPress={this.reScanOnPress.bind(this)}>
                         <Text style={styles.buttonText}>Add Device</Text>
                     </TouchableHighlight>
+                    <TouchableHighlight style={styles.bigButton} onPress={() => {
+                        this.reScanWifi()
+                    }}>
+                        <Text style={styles.buttonText}>Scan Wifi</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight style={styles.bigButton} onPress={() => {
+
+                        this.registerDevices()
+                    }}>
+                        <Text style={styles.buttonText}>Register</Text>
+                    </TouchableHighlight>
                 </View>
-
-                <TouchableHighlight style={[styles.bigButton, { left: 20 }]} onPress={() => {
-                    this.reScanWifi()
-                }}>
-                    <Text style={styles.buttonText}>Scan Wifi</Text>
-                </TouchableHighlight>
-                <TouchableHighlight style={[styles.bigButton, { left: 20, top: 100 }]} onPress={() => {
-
-                    this.registerDevices()
-                }}>
-                    <Text style={styles.buttonText}>Register</Text>
-                </TouchableHighlight>
-
                 {this.renderTextFieldView()}
                 {this.renderLoginButton()}
                 <FlatList style={{ height: 300, width: '100%' }}
@@ -336,52 +332,3 @@ export default class DeviceList extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 15,
-        backgroundColor: '#F5FCFF',
-        marginBottom: 100
-    },
-    row: {
-        flexDirection: 'row'
-    },
-    title: {
-        fontSize: 20,
-    },
-    instructionsContainer: {
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#CCCCCC',
-    },
-    instructionsTitle: {
-        marginBottom: 10,
-        color: '#333333'
-    },
-    instructions: {
-        color: '#333333'
-    },
-    button: {
-        padding: 5,
-        width: 120,
-        alignItems: 'center',
-        backgroundColor: 'blue',
-        marginRight: 15,
-    },
-    bigButton: {
-        position: 'absolute',
-        right: 20,
-        top: 40,
-        padding: 5,
-        width: 100,
-        alignItems: 'center',
-        backgroundColor: 'blue',
-        marginRight: 15,
-    },
-    buttonText: {
-        color: 'white'
-    },
-    answer: {
-        marginTop: 5,
-    }
-});

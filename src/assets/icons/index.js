@@ -1,4 +1,6 @@
 export const IC_LOGO = require('./logo.png');
+export const IC_MENU = require('./menu.png');
+export const IC_BACK = require('./back.png');
 export const IC_BLACK_S_OFF = require('./black_switch_off.png');
 export const IC_BLACK_S_ON = require('./black_switch_on.png');
 export const IC_HOME_S_OFF = require('./home_switch_off.png');

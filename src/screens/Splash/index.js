@@ -12,7 +12,7 @@ export default class Splash extends Component {
             AsyncStorage.getItem(keys.kUSER_DATA).then((user) => {
                 setTimeout(() => {
                     if (user) {
-                        this.props.navigation.navigate('Home', { deviceList: [] })
+                        this.props.navigation.navigate('DrawerMenu')
                     } else {
                         this.props.navigation.navigate('Login')
                     }

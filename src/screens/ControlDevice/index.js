@@ -3,7 +3,7 @@ import { View, BackHandler, AsyncStorage, FlatList, TouchableOpacity, Text } fro
 import * as keys from '../../constants/keys';
 import * as api from '../../constants/api';
 import styles from './style';
-import { ImagineSwitch } from 'atoms';
+import { ImagineSwitch, ImagineNavigationBar } from 'atoms';
 import * as icon from 'icons';
 
 export default class ControlDevice extends Component {
@@ -126,17 +126,13 @@ export default class ControlDevice extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <TouchableOpacity
-                    style={{
-                        alignItems: 'center',
-                        justifyContent: 'center', height: 50,
-                        backgroundColor: 'white', flexDirection: 'row'
-                    }} onPress={() => {
-                        // this.props.navigation.navigate('ControlDeviceDetail', { selectedItem: item })
-                    }}>
-                    <Text style={{ paddingLeft: 20, fontWeight: '800', fontSize: 22 }}>All Devices</Text>
-                    <View style={{ position: 'absolute', height: 1, bottom: 1, width: '100%', backgroundColor: 'black' }} />
-                </TouchableOpacity>
+                <ImagineNavigationBar
+                    title={'Control Device'}
+                    isMenu={true}
+                    onLeftPress={() => {
+                        this.props.navigation.openDrawer()
+                    }}
+                />
                 <FlatList
                     style={{ width: '100%' }}
                     data={this.state.deviceList}

@@ -1,7 +1,7 @@
 import React, { Component, } from 'react';
 import { View, Text, TouchableOpacity, BackHandler, AsyncStorage, DeviceEventEmitter } from 'react-native';
 import styles from './style';
-import { ImagineSwitch } from 'atoms';
+import { ImagineSwitch, ImagineNavigationBar } from 'atoms';
 import * as icon from 'icons';
 import Slider from "react-native-slider";
 import * as common from '../../constants/common';
@@ -34,7 +34,7 @@ export default class Home extends Component {
             currentBSSID: '',
             numberOfSwitch: '0',
             numberOfFan: '0',
-            deviceList: this.props.navigation.state.params.deviceList
+            deviceList: []//this.props.navigation.state.params.deviceList
         }
     }
     componentWillMount() {
@@ -53,6 +53,7 @@ export default class Home extends Component {
         return (
             <TouchableOpacity style={{ position: 'absolute', top: 40, left: 20 }} onPress={() => {
                 this.props.navigation.goBack()
+
             }}>
                 <Text style={{ fontSize: 15 }}>{`Back`}</Text>
             </TouchableOpacity>
@@ -120,122 +121,82 @@ export default class Home extends Component {
         return (
             <View style={styles.container}>
                 {/* {this.renderBackButton()} */}
-                <View style={{ flexDirection: 'row', height: 50, marginBottom: 30 }}>
-                    <TouchableOpacity style={{
-                        width: 100,
-                        alignItems: 'center',
-                        backgroundColor: common.APP_PRIMARY,
-                        marginRight: 15,
-                    }} onPress={() => {
-                        this.reScanOnPress()
-                    }}>
-                        <Text style={{ fontSize: 15 }}>{`Home`}</Text>
-                    </TouchableOpacity>
+                <ImagineNavigationBar
+                    title={'Home'}
+                    isMenu={true}
+                    onLeftPress={() => {
+                        this.props.navigation.openDrawer()
+                    }}
+                />
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', }}>
+                        {this.state.deviceList.map((item, index) => {
+                            return (<ImagineSwitch
+                                title={item.device_Name}
+                                style={{ height: 70, width: 80, marginRight: 20, marginBottom: 40 }}
+                                source={this.state.switch1On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON}
+                                onPress={() => {
+                                    switch (index) {
+                                        case 0:
+                                            alert('index')
+                                            this.setState({
+                                                fan1On: !this.state.fan1On
+                                            })
+                                            if (!this.state.fan1On) {
+                                                this.switchControl(item.device_Name, 2)
+                                            } else {
+                                                this.switchControl(item.device_Name, 2)
+                                            }
+                                        case 1:
+                                            this.setState({
+                                                fan2On: !this.state.fan2On
+                                            })
+                                            if (!this.state.fan2On) {
+                                                this.switchControl(item.device_Name, 2)
+                                            } else {
+                                                this.switchControl(item.device_Name, 2)
+                                            }
+                                        case 2:
+                                            this.setState({
+                                                switch1On: !this.state.switch1On
+                                            })
+                                            if (!this.state.switch1On) {
+                                                this.switchControl(item.device_Name, 2)
+                                            } else {
+                                                this.switchControl(item.device_Name, 2)
+                                            }
+                                        case 3:
+                                            this.setState({
+                                                switch1On: !this.state.switch2On
+                                            })
+                                            if (!this.state.switch2On) {
+                                                this.switchControl(item.device_Name, 2)
+                                            } else {
+                                                this.switchControl(item.device_Name, 2)
+                                            }
+                                        case 4:
+                                            this.setState({
+                                                switch1On: !this.state.switch3On
+                                            })
+                                            if (!this.state.switch3On) {
+                                                this.switchControl(item.device_Name, 2)
+                                            } else {
+                                                this.switchControl(item.device_Name, 2)
+                                            }
+                                        case 5:
+                                            this.setState({
+                                                switch1On: !this.state.switch4On
+                                            })
+                                            if (!this.state.switch4On) {
+                                                this.switchControl(item.device_Name, 2)
+                                            } else {
+                                                this.switchControl(item.device_Name, 2)
+                                            }
+                                    }
+                                }} />)
+                        })}
 
-                    <TouchableOpacity style={{
-                        width: 100,
-                        alignItems: 'center',
-                        backgroundColor: common.APP_PRIMARY,
-                        marginRight: 15,
-                    }} onPress={() => {
-                        this.props.navigation.navigate('DeviceList')
-                    }}>
-                        <Text style={{ fontSize: 15 }}>{`Configure Device`}</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={{
-                        width: 100,
-                        alignItems: 'center',
-                        backgroundColor: common.APP_PRIMARY,
-                        marginRight: 15,
-                    }} onPress={() => {
-                        this.props.navigation.navigate('ControlDevice')
-                    }}>
-                        <Text style={{ fontSize: 15 }}>{`Control Device`}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{
-                        width: 100,
-                        alignItems: 'center',
-                        backgroundColor: common.APP_PRIMARY,
-                        marginRight: 15,
-                    }} onPress={() => {
-                        AsyncStorage.removeItem(keys.kUSER_DATA)
-                        setTimeout(() => {
-                            this.props.navigation.navigate('Login')
-                        }, 300);
-                    }}>
-                        <Text style={{ fontSize: 15 }}>{`Logout`}</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', }}>
-                    {this.state.deviceList.map((item, index) => {
-                        return (<ImagineSwitch
-                            title={item.device_Name}
-                            style={{ height: 70, width: 70, marginRight: 20, marginBottom: 20 }}
-                            source={this.state.switch1On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON}
-                            onPress={() => {
-                                switch (index) {
-                                    case 0:
-                                        alert('index')
-                                        this.setState({
-                                            fan1On: !this.state.fan1On
-                                        })
-                                        if (!this.state.fan1On) {
-                                            this.switchControl(item.device_Name, 2)
-                                        } else {
-                                            this.switchControl(item.device_Name, 2)
-                                        }
-                                    case 1:
-                                        this.setState({
-                                            fan2On: !this.state.fan2On
-                                        })
-                                        if (!this.state.fan2On) {
-                                            this.switchControl(item.device_Name, 2)
-                                        } else {
-                                            this.switchControl(item.device_Name, 2)
-                                        }
-                                    case 2:
-                                        this.setState({
-                                            switch1On: !this.state.switch1On
-                                        })
-                                        if (!this.state.switch1On) {
-                                            this.switchControl(item.device_Name, 2)
-                                        } else {
-                                            this.switchControl(item.device_Name, 2)
-                                        }
-                                    case 3:
-                                        this.setState({
-                                            switch1On: !this.state.switch2On
-                                        })
-                                        if (!this.state.switch2On) {
-                                            this.switchControl(item.device_Name, 2)
-                                        } else {
-                                            this.switchControl(item.device_Name, 2)
-                                        }
-                                    case 4:
-                                        this.setState({
-                                            switch1On: !this.state.switch3On
-                                        })
-                                        if (!this.state.switch3On) {
-                                            this.switchControl(item.device_Name, 2)
-                                        } else {
-                                            this.switchControl(item.device_Name, 2)
-                                        }
-                                    case 5:
-                                        this.setState({
-                                            switch1On: !this.state.switch4On
-                                        })
-                                        if (!this.state.switch4On) {
-                                            this.switchControl(item.device_Name, 2)
-                                        } else {
-                                            this.switchControl(item.device_Name, 2)
-                                        }
-                                }
-                            }} />)
-                    })}
-
-                    {/* <ImagineSwitch
+                        {/* <ImagineSwitch
                         style={{ height: 150, width: 150, marginRight: 20, marginBottom: 20 }}
                         source={this.state.switch1On ? icon.IC_CIRCLE_S_OFF : icon.IC_CIRCLE_S_ON}
                         onPress={() => {
@@ -284,30 +245,31 @@ export default class Home extends Component {
                                 this.switchControl('TURNON_SW4', 3)
                             }
                         }} /> */}
-                </View>
-                <Slider
-                    style={{ width: 300, height: 100 }}
-                    step={1}
-                    minimumValue={0}
-                    maximumValue={4}
-                    value={this.state.sliderValue}
-                    onValueChange={val => {
-                        this.setState({ sliderValue: val })
-                        if (val == 1) {
-                            this.switchControl('FSPEED_FN1_1', 1)
-                        } else if (val == 2) {
-                            this.switchControl('FSPEED_FN1_2', 1)
-                        } else if (val == 3) {
-                            this.switchControl('FSPEED_FN1_3', 1)
-                        } else if (val == 4) {
-                            this.switchControl('FSPEED_FN1_4', 1)
-                        } else {
-                            this.switchControl('TURNOF_FN1', 1)
-                        }
+                    </View>
+                    <Slider
+                        style={{ width: 300, height: 100 }}
+                        step={1}
+                        minimumValue={0}
+                        maximumValue={4}
+                        value={this.state.sliderValue}
+                        onValueChange={val => {
+                            this.setState({ sliderValue: val })
+                            if (val == 1) {
+                                this.switchControl('FSPEED_FN1_1', 1)
+                            } else if (val == 2) {
+                                this.switchControl('FSPEED_FN1_2', 1)
+                            } else if (val == 3) {
+                                this.switchControl('FSPEED_FN1_3', 1)
+                            } else if (val == 4) {
+                                this.switchControl('FSPEED_FN1_4', 1)
+                            } else {
+                                this.switchControl('TURNOF_FN1', 1)
+                            }
 
-                    }}
-                    onSlidingComplete={val => this.getVal(val)}
-                />
+                        }}
+                        onSlidingComplete={val => this.getVal(val)}
+                    />
+                </View>
             </View>
         );
     }
