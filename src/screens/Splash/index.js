@@ -16,7 +16,7 @@ export default class Splash extends Component {
                     } else {
                         this.props.navigation.navigate('Login')
                     }
-                }, 100);
+                }, 2000);
             })
         } catch (error) {
             alert(error)

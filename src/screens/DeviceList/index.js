@@ -25,6 +25,7 @@ export default class DeviceList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoading: false,
             deviceConfUrl: '',
             txtSSID: '',
             txtPassword: '',
@@ -292,7 +293,7 @@ export default class DeviceList extends Component {
         return (
             <View>
                 <ImagineNavigationBar
-                    title={'Device List'}
+                    title={'Configure Device'}
                     isMenu={true}
                     onLeftPress={() => {
                         this.props.navigation.openDrawer()
@@ -322,7 +323,7 @@ export default class DeviceList extends Component {
                     contentContainerStyle={{ marginLeft: 20 }} />
                 <WebView
                     source={{ uri: this.state.deviceConfUrl }}
-                    style={{ position: 'absolute', bottom: 1000, width: 300, height: 100, backgroundColor: 'red' }}
+                    style={{ position: 'absolute', bottom: 1000, width: 300, height: 100, backgroundColor: 'transparent' }}
                     onLoadEnd={e => {
                         // this.registerDevices()
                     }}

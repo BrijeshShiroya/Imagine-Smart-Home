@@ -12,3 +12,7 @@ export const IC_CIRCLE_S_ON = require('./circle_s_on.png');
 export const IC_CIRCLE_S_OFF = require('./circle_s_off.png');
 export const IC_DELETE = require('./delete.png');
 export const IC_EDIT = require('./edit.png');
+export const IC_HOME = require('./home.png');
+export const IC_CONFIG_DEVICE = require('./deviceList.png');
+export const IC_DEVICE_LIST = require('./configDevice.png');
+export const IC_LOGOUT = require('./logout.png');

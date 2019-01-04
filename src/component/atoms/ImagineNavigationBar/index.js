@@ -15,7 +15,7 @@ export default class ImagineNavigationBar extends Component {
                     <Image style={styles.leftImage}
                         source={this.props.isMenu ? icon.IC_MENU : icon.IC_BACK} />
                 </TouchableOpacity>
-                <Text style={{ color: 'white' }}>{this.props.title}</Text>
+                <Text style={{ color: 'white', fontSize: 20 }}>{this.props.title}</Text>
             </View>
         );
     }

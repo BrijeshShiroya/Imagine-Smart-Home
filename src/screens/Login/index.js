@@ -11,8 +11,8 @@ export default class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            mobile: '9978536597',
-            password: '123456',
+            mobile: '1234567890',
+            password: '111111',
             isLoading: false
         }
     }

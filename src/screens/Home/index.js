@@ -246,7 +246,7 @@ export default class Home extends Component {
                             }
                         }} /> */}
                     </View>
-                    <Slider
+                    {/* <Slider
                         style={{ width: 300, height: 100 }}
                         step={1}
                         minimumValue={0}
@@ -265,10 +265,9 @@ export default class Home extends Component {
                             } else {
                                 this.switchControl('TURNOF_FN1', 1)
                             }
-
                         }}
                         onSlidingComplete={val => this.getVal(val)}
-                    />
+                    /> */}
                 </View>
             </View>
         );

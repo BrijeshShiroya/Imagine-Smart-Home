@@ -23,11 +23,15 @@ const AppRouteConfig = createStackNavigator({
                 contentComponent: Menu,
                 drawerWidth: 250
             }
-        )
+        ), navigationOptions: {
+            gesturesEnabled: false,
+        }
     },
 },
     {
         headerMode: 'none'
     })
+
+
 export default AppRouteConfig;
 
