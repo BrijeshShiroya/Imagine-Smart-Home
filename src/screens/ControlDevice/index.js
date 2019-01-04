@@ -100,7 +100,6 @@ export default class ControlDevice extends Component {
                             setTimeout(() => {
                                 this.getAllStatus(isLoaderAvailable)
                             }, 300);
-
                         }
                     }
                 })
@@ -211,7 +210,6 @@ export default class ControlDevice extends Component {
         allKeys.map((serial) => {
             this.getCurrenStatus(serial, this.state.deviceSerials[serial])
         })
-
     }
 
     getCurrenStatus(serial, allSerialItems) {
