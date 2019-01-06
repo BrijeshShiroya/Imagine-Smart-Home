@@ -3,9 +3,9 @@ import Splash from './screens/Splash';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
-import DeviceList from './screens/DeviceList';
-import ControlDevice from './screens/ControlDevice';
-import ControlDeviceDetail from './screens/ControlDeviceDetail';
+import ConfigureDevice from './screens/ConfigureDevice';
+import AllDevice from './screens/AllDevice';
+import DeviceDetail from './screens/DeviceDetail';
 import Menu from './screens/Menu';
 
 const AppRouteConfig = createStackNavigator({
@@ -15,9 +15,9 @@ const AppRouteConfig = createStackNavigator({
     DrawerMenu: {
         screen: createDrawerNavigator({
             Home: { screen: Home, },
-            DeviceList: { screen: DeviceList },
-            ControlDevice: { screen: ControlDevice },
-            ControlDeviceDetail: { screen: ControlDeviceDetail },
+            ConfigureDevice: { screen: ConfigureDevice },
+            AllDevice: { screen: AllDevice },
+            DeviceDetail: { screen: DeviceDetail },
             Menu: { screen: Menu },
         }, {
                 contentComponent: Menu,

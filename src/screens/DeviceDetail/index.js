@@ -18,7 +18,7 @@ import * as common from '../../constants/common';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import * as keys from '../../constants/keys';
 
-export default class ControlDeviceDetail extends Component {
+export default class DeviceDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -45,7 +45,7 @@ export default class ControlDeviceDetail extends Component {
         })
         BackHandler.addEventListener('hardwareBackPress', () => {
             DeviceEventEmitter.emit('goToControlDevice', {})
-            this.props.navigation.navigate('ControlDevice')
+            this.props.navigation.navigate('AllDevice')
             return true
         });
     }
@@ -303,7 +303,7 @@ export default class ControlDeviceDetail extends Component {
                     isMenu={false}
                     onLeftPress={() => {
                         DeviceEventEmitter.emit('goToControlDevice', {})
-                        this.props.navigation.navigate('ControlDevice')
+                        this.props.navigation.navigate('AllDevice')
                     }}
                 />
                 <View style={{ flexDirection: 'row', position: 'absolute', top: 0, right: 0, height: 50, width: 90, justifyContent: 'center' }}>

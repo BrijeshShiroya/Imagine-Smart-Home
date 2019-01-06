@@ -6,7 +6,7 @@ import styles from './style';
 import { ImagineSwitch, ImagineNavigationBar, ImagineLoader } from 'atoms';
 import * as icon from 'icons';
 
-export default class ControlDevice extends Component {
+export default class AllDevice extends Component {
 
     constructor(props) {
         super(props)
@@ -58,11 +58,10 @@ export default class ControlDevice extends Component {
                         'Content-Type': 'Application/json',
                     }
                 }).then((response) => {
-
                     if (response.status == 200) {
                         if (response.data.devices.length > 0) {
                             // alert(JSON.stringify(response.data.devices))
-                            var arr = this.state.deviceSerials
+                            var arr = []//this.state.deviceSerials
                             response.data.devices.map((value) => {
                                 let serial = value.device_serials
                                 let singleSerial = serial.split('-')[0]
@@ -100,6 +99,10 @@ export default class ControlDevice extends Component {
                             setTimeout(() => {
                                 this.getAllStatus(isLoaderAvailable)
                             }, 300);
+                        } else {
+                            this.setState({
+                                isLoading: false
+                            })
                         }
                     }
                 })
@@ -120,7 +123,7 @@ export default class ControlDevice extends Component {
             }} onPress={() => {
                 let obj = {}
                 DeviceEventEmitter.emit('goToControlDeviceDetail', obj)
-                this.props.navigation.navigate('ControlDeviceDetail', { selectedItem: item, selectedIndex: index })
+                this.props.navigation.navigate('DeviceDetail', { selectedItem: item, selectedIndex: index })
             }}>
             <Text style={{ paddingLeft: 20, fontWeight: '800', fontSize: 16 }}>{item.device_Name}</Text>
             <ImagineSwitch
@@ -273,6 +276,21 @@ export default class ControlDevice extends Component {
                     data={this.state.deviceSerials[allKeys[0]]}
                     renderItem={({ item, index }) => this._renderItem(item, index)}
                 /> */}
+                {
+                    this.state.arrMainData.length == 0 ?
+                        <View style={{
+                            position: 'absolute',
+                            top: 50,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <Text> No Device available
+                            </Text>
+                        </View> : null
+                }
                 <ImagineLoader isVisible={this.state.isLoading} />
             </View>
         );

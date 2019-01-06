@@ -21,7 +21,7 @@ import * as keys from '../../constants/keys';
 import wifi from 'react-native-android-wifi';
 import styles from './style';
 
-export default class DeviceList extends Component {
+export default class ConfigureDevice extends Component {
     constructor(props) {
         super(props);
         this.state = {

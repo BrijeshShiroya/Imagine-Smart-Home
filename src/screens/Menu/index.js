@@ -45,9 +45,9 @@ export default class Menu extends Component {
                 if (item === 'Home') {
                     this.props.navigation.navigate('Home')
                 } else if (item === 'Configure Device') {
-                    this.props.navigation.navigate('DeviceList')
+                    this.props.navigation.navigate('ConfigureDevice')
                 } else if (item === 'All Devices') {
-                    this.props.navigation.navigate('ControlDevice')
+                    this.props.navigation.navigate('AllDevice')
                 } else {
 
                     Alert.alert('Are you sure you want to logout?', '',
