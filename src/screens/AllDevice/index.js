@@ -19,11 +19,13 @@ export default class AllDevice extends Component {
     }
     componentWillMount() {
 
-        this.getDeviceList(true)
+        // this.getDeviceList(true)
+        this.getAllDeviceList()
         DeviceEventEmitter.addListener('goToControlDevice', (obj) => {
             this.state.deviceSerials = {}
             this.state.deviceList = []
-            this.getDeviceList(false)
+            // this.getDeviceList(false)
+            this.getAllDeviceList()
         })
         BackHandler.addEventListener('hardwareBackPress', () => {
             this.props.navigation.goBack()
@@ -38,6 +40,19 @@ export default class AllDevice extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps) {
 
+        }
+    }
+
+    getAllDeviceList() {
+        try {
+            AsyncStorage.getItem(keys.kDEVICE_MAIN_DATA).then((deviceList) => {
+                let deviceListResult = JSON.parse(deviceList)
+                this.setState({
+                    arrMainData: deviceListResult
+                })
+            })
+        } catch (error) {
+            alert(error)
         }
     }
 
@@ -60,7 +75,7 @@ export default class AllDevice extends Component {
                 }).then((response) => {
                     if (response.status == 200) {
                         if (response.data.devices.length > 0) {
-                            // alert(JSON.stringify(response.data.devices))
+                            alert(JSON.stringify(response.data.devices))
                             var arr = []//this.state.deviceSerials
                             response.data.devices.map((value) => {
                                 let serial = value.device_serials
@@ -173,27 +188,28 @@ export default class AllDevice extends Component {
         }).then((resultResponse) => {
             if (resultResponse.status == 200) {
                 let switchIndex = item.device_serials.slice(-1)
-                let response = resultResponse.data.Device_Response//'STATUS_1_3_1_1_1_3_0_4'
-                let resultDataArray = response.split('_')
-                if (item.device_type == 'FAN') {
-                    if (switchIndex === '1') {
-                        alert(resultDataArray[5])
-                    } else if (switchIndex === '2') {
-                        alert(resultDataArray[7])
-                    }
-                } else {
-                    if (resultDataArray[switchIndex] === '1') {
-                        // this.setState({
-                        //     switch: false
-                        // })
-                        item.selected = false
-                    } else {
-                        // this.setState({
-                        //     switch: true
-                        // })
-                        item.selected = true
-                    }
-                }
+                // let response = resultResponse.data.Device_Response//'STATUS_1_3_1_1_1_3_0_4'
+                // alert(JSON.stringify(response))
+                // let resultDataArray = response.split('_')
+                // if (item.device_type == 'FAN') {
+                //     if (switchIndex === '1') {
+                //         alert(resultDataArray[5])
+                //     } else if (switchIndex === '2') {
+                //         alert(resultDataArray[7])
+                //     }
+                // } else {
+                //     if (resultDataArray[switchIndex] === '1') {
+                //         // this.setState({
+                //         //     switch: false
+                //         // })
+                //         item.selected = false
+                //     } else {
+                //         // this.setState({
+                //         //     switch: true
+                //         // })
+                //         item.selected = true
+                //     }
+                // }
                 setTimeout(() => {
                     this.setState({
                         isLoading: false
@@ -216,6 +232,44 @@ export default class AllDevice extends Component {
     }
 
     getCurrenStatus(serial, allSerialItems) {
+        const axios = require('axios');
+        axios({
+            method: 'get',
+            url: `${api.API_CONTROL_DEVICE}Device_serial=${serial}&Device_action=STATUS_ALL`,
+            headers: {
+                'Content-Type': 'Application/json',
+            }
+        }).then((response) => {
+            if (response.status === 200) {
+                let responseNew = response.data.Device_Response//'STATUS_1_3_1_1_1_3_0_4
+                let resultDataArray = responseNew.split('_')
+                allSerialItems.map((item) => {
+                    let switchIndex = item.device_serials.slice(-1)
+                    if (item.device_type == 'FAN') {
+                        if (switchIndex === '1') {
+                            // console.log(resultDataArray[5])
+                        } else if (switchIndex === '2') {
+                            // console.log(resultDataArray[7])
+                        }
+                    } else {
+                        if (resultDataArray[switchIndex] === '1') {
+                            item.selected = true
+                        } else {
+                            item.selected = false
+                        }
+                    }
+                })
+                setTimeout(() => {
+                    // alert(JSON.stringify(this.state.deviceSerials))
+                    this.setState({
+                        isLoading: false
+                    })
+                }, 500);
+            }
+        })
+    }
+
+    getCurrenStatusNew(serial, allSerialItems) {
         const axios = require('axios');
         axios({
             method: 'get',

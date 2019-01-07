@@ -38,7 +38,10 @@ export default class ConfigureDevice extends Component {
             isWifiNetworkEnabled: null,
             wifiList: [],
             modalVisible: false,
-            currentScannedWifi: ''
+            currentScannedWifi: '',
+            arrMainData: [],
+            deviceSerials: {},
+            deviceList: [],
         };
 
     }
@@ -263,22 +266,50 @@ export default class ConfigureDevice extends Component {
                         // alert(response.data["devices"])
                         // console.log(response.data["devices"])
                         if (response.data.devices.length > 0) {
-                            this.props.navigation.navigate("Home", { deviceList: response.data.devices })
-                            DeviceEventEmitter.emit('refreshDevices', response.data.devices);
-                        }
-                        console.log(JSON.stringify(response.data))
-                        console.log(JSON.parse(response.data))
-                        if (response.data.Error == 'Success') {
-                            let userDic = {
-                                'mobile': this.state.mobile,
-                                'password': this.state.password
+                            if (response.data.devices.length > 0) {
+                                var arr = []//this.state.deviceSerials
+                                response.data.devices.map((value) => {
+                                    let serial = value.device_serials
+                                    let singleSerial = serial.split('-')[0]
+                                    let allKeys = Object.keys(arr)
+                                    //if value available
+                                    if (allKeys.includes(singleSerial)) {
+                                        let arrRes = arr[singleSerial]
+                                        value.selected = false
+                                        arrRes.push(value)
+                                        arr[singleSerial] = arrRes
+                                    } else {
+                                        let arrNew = []
+                                        value.selected = false
+                                        arrNew.push(value)
+                                        arr[singleSerial] = arrNew
+                                    }
+                                })
+                                var arrResult = []
+                                Object.keys(arr)
+                                    .forEach(function eachKey(key) {
+                                        var obj = {}
+                                        obj.title = key
+                                        obj.data = arr[key]
+                                        arrResult.push(obj)
+                                        // console.log(key); // alerts key 
+                                        // console.log(arr[key]); // alerts value
+                                    });
+                                setTimeout(() => {
+                                    this.setState({
+                                        deviceList: response.data.devices,
+                                        deviceSerials: arr,
+                                        arrMainData: arrResult
+                                    })
+                                    AsyncStorage.setItem(keys.kDEVICE_MAIN_DATA, JSON.stringify(arrResult)).then((result) => {
+                                        alert('Device register successful')
+                                    }).catch((error) => {
+                                        alert('Getting error in device registration')
+                                    })
+                                }, 200);
                             }
-                            AsyncStorage.setItem(keys.kUSER_DATA, JSON.stringify(userDic))
-                            setTimeout(() => {
-                                this.props.navigation.navigate('Home')
-                            }, 300);
-                        } else {
-                            alert(response.data.Error)
+                            // this.props.navigation.navigate("Home", { deviceList: response.data.devices })
+                            // DeviceEventEmitter.emit('refreshDevices', response.data.devices);
                         }
                     }
                 })
